@@ -12,6 +12,5 @@ A repo for overlays I make for myself using [hudkit](https://github.com/anko/hud
 # Adding a new overlay
 
 1. Create a folder with an appropriate name so you'll know what it's for
-1. Create the files `env.sh` and `page.html` in that folder
-1. In `env.sh`, set all the environment variables the overlay will need
+1. Create the file `page.html` in that folder
 1. In `page.html`, implement the HTML/JS for the overlay
