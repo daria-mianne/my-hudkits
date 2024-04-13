@@ -1,0 +1,59 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline'; frame-src *;" />
+        <style>
+            .mainContent {
+                display: flex;
+            }
+            .noMargin {
+                margin: 0 0 0 0;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="mainContent noMargin" class="mainContent">
+            <div id="monitorFiller" class="noMargin"></div>
+            <div id="overlayContent" width="100%" height="100%"></div>
+        </div>
+
+        <script>
+            ;(async () => {
+                const config = {
+                    width: 650,
+                    height: 300,
+                    xOffset: 0,
+                    yOffset: 30,
+                    clickable: false,
+                    wrappedOverlay: 'http://proxy.iinact.com/overlay/kagerou/?HOST_PORT=ws://127.0.0.1:10501',
+                };
+
+                const mainContent = document.getElementById('mainContent');
+                const monitors = await Hudkit.getMonitorLayout();
+
+                const nonGameMonitor = monitors[0];
+                const monitorFiller = document.getElementById('monitorFiller');
+                monitorFiller.style.left = nonGameMonitor.x;
+                monitorFiller.style.top = nonGameMonitor.y;
+                monitorFiller.style.width = nonGameMonitor.width;
+                monitorFiller.style.height = nonGameMonitor.height;
+
+                const overlayWrapper = document.getElementById('overlayContent');
+                overlayWrapper.style.marginLeft = `${config.xOffset}px`;
+                overlayWrapper.style.marginTop = `${config.yOffset}px`;
+                
+                const wrappedOverlay = document.createElement('iframe');
+                wrappedOverlay.src = config.wrappedOverlay;
+                wrappedOverlay.style.width = `${config.width}px`;
+                wrappedOverlay.style.height = `${config.height}px`;
+                overlayWrapper.appendChild(wrappedOverlay);
+                
+                if (config.clickable) {
+                    console.log('making the wrapped overlay clickable...');
+                    await Hudkit.setClickableAreas([wrappedOverlay.getBoundingClientRect()]);
+                }
+            })();
+        </script>
+    </body>
+</html>
